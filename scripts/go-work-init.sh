@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd src
-go work init ./protocol  ./client ./server
-go work use  ./protocol  ./client ./server
+rm -f go.work go.work.sum
+go work init ./protocol ./client ./server ./debug-ui ./network
 echo "go.work ready"

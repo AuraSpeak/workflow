@@ -33,6 +33,13 @@ This repo holds scripts and rules to clone the Aura-Speak repositories and work 
    ```
    Creates `go.work` in `src/` with `protocol`, `router`, `client`, `server`.
 
+### Make Commands
+
+| Command | Purpose |
+|---------|---------|
+| `make bootstrap` | Runs `go generate` to generate code (e.g. stringer for `PacketType` in `protocol`). |
+| `make test-all` | Runs all tests across all modules (`client`, `protocol`, `server`, `debug-ui`) in the workspace. |
+
 ---
 
 ## Dev Rules
