@@ -1,4 +1,5 @@
 src/
+todos/
 .DS_Store
 go.work
 go.work.sum
