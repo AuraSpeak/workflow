@@ -17,7 +17,7 @@ if [ "$REPO_ROOT" = "$ROOT" ]; then
 	# Pushing from workflow repo: strip all module go.mods
 	"$ROOT/scripts/strip-go-replace.sh"
 	if ! git -C "$ROOT" diff --quiet -- src/*/go.mod 2>/dev/null; then
-		echo "Replace directives were stripped from go.mod. Please commit the changes and push again."
+		echo "Replace directives were stripped from go.mod. Commit the changes (e.g. git add src/*/go.mod && git commit -m 'chore: strip local replace'), then push again. After push, run: just inject-replace"
 		exit 1
 	fi
 else
@@ -27,7 +27,7 @@ else
 			MODULE="$(basename "$REPO_ROOT")"
 			"$ROOT/scripts/strip-go-replace.sh" "$MODULE"
 			if ! git -C "$REPO_ROOT" diff --quiet -- go.mod 2>/dev/null; then
-				echo "Replace directives were stripped from go.mod. Please commit the changes and push again."
+				echo "Replace directives were stripped from go.mod. Commit the change (git add go.mod && git commit -m 'chore: strip local replace'), then push again. After push, run from workflow root: just inject-replace"
 				exit 1
 			fi
 			;;
