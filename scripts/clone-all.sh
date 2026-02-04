@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ORG="https://github.com/AuraSpeak"
-mkdir -p src && cd src
-for r in protocol client server debug-ui network; do
-  [ -d "$r" ] || git clone "$ORG/$r.git"
+mkdir -p "$ROOT/src" && cd "$ROOT/src"
+for r in $(cat "$ROOT/scripts/modules"); do
+	[ -d "$r" ] || git clone "$ORG/$r.git"
 done

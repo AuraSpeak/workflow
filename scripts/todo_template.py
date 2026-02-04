@@ -48,7 +48,7 @@ def build_template(name: str, module: str) -> str:
     lines.extend([
         "- [ ] **Code**: Implementation in the relevant module(s) under `src/`.",
         "",
-        "- [ ] **Tests**: Unit tests; `go test ./...` in module(s); `make test-all` from workflow root.",
+        "- [ ] **Tests**: Unit tests; `go test ./...` in module(s); `just test-all` from workflow root.",
         "",
         "- [ ] **Documentation**: Package/public comments; update module README (Requirements, Structure, Quick start, Testing).",
         "",
@@ -63,7 +63,7 @@ def build_template(name: str, module: str) -> str:
     lines.extend([
         "- [ ] **Versioning**: Bump SemVer (minor for feature, patch for fix).",
         "",
-        "- [ ] **Build**: `make bootstrap` and `make test-all` from workflow root.",
+        "- [ ] **Build**: `just bootstrap` and `just test-all` from workflow root.",
         "",
     ])
 

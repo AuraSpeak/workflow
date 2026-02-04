@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Pre-push hook: strip local replace directives from go.mod so they are not pushed.
+# Install with: just setup or just install-hooks (from workflow root).
+# Works when run from workflow root or from any src/<module> repo.
+set -euo pipefail
+# Find workflow root (directory that has both src/ and scripts/)
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+while [ "$ROOT" != "/" ]; do
+	[ -d "$ROOT/src" ] && [ -d "$ROOT/scripts" ] && break
+	ROOT="$(cd "$ROOT/.." && pwd)"
+done
+[ "$ROOT" = "/" ] && { echo "Workflow root not found"; exit 1; }
+
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || { echo "Not inside a git repo"; exit 1; }
+
+if [ "$REPO_ROOT" = "$ROOT" ]; then
+	# Pushing from workflow repo: strip all module go.mods
+	"$ROOT/scripts/strip-go-replace.sh"
+	if ! git -C "$ROOT" diff --quiet -- src/*/go.mod 2>/dev/null; then
+		echo "Replace directives were stripped from go.mod. Please commit the changes and push again."
+		exit 1
+	fi
+else
+	# Pushing from a module repo under src/
+	case "$REPO_ROOT" in
+		"$ROOT/src/"*)
+			MODULE="$(basename "$REPO_ROOT")"
+			"$ROOT/scripts/strip-go-replace.sh" "$MODULE"
+			if ! git -C "$REPO_ROOT" diff --quiet -- go.mod 2>/dev/null; then
+				echo "Replace directives were stripped from go.mod. Please commit the changes and push again."
+				exit 1
+			fi
+			;;
+		*)
+			# Some other repo (e.g. nested clone); do nothing
+			;;
+	esac
+fi
+exit 0
