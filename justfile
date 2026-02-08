@@ -36,3 +36,6 @@ act:
 
 todo name module:
     python3 scripts/todo_template.py --name "{{name}}" --module "{{module}}"
+
+debug-ui:
+    cd src/debug-ui/cmd && go run .
